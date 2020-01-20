@@ -1,5 +1,7 @@
 package com.xd;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,21 @@ public class TestLambda {
         strList.add("213");
         strList.add("214");
         strList.add("215");
+
+        //起始时间
+        long start = System.currentTimeMillis();
+        //结束时间
+        long end = System.currentTimeMillis();
+
+        //jdk1.8
+        //起始时间
+        Instant startIns = Instant.now();
+        //结束时间
+        Instant endIns = Instant.now();
+        //计算时间差
+        Duration.between(startIns, endIns).toMillis();
+
+
 
         //遍历
         list.forEach(str -> System.out.println(str));
