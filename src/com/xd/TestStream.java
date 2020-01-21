@@ -3,6 +3,7 @@ package com.xd;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +24,7 @@ public class TestStream {
                 .forEach((x) -> System.out.println(x));
         System.out.println("======");
 
-        //去重
+        //去重(对于自己的对象，需要重写equals和hashCode方法
         list.stream().distinct()
                 .forEach((x) -> System.out.println(x));
         System.out.println("======");
@@ -108,5 +109,104 @@ public class TestStream {
         Stream<String> stream2 = stream1.flatMap(str -> Arrays.stream(str)).distinct();
         List<String> s = stream2.collect(Collectors.toList());
         System.out.println(s);
+
+
+        System.out.println("=======distinct 需要重新对象的 equals 和 hashCode 方法");
+        System.out.println("======= 未重写 equals 和 hashCode 方法");
+        List list1 = Arrays.asList(new Student1("范闲", 18),
+                                    new Student1("范闲", 18),
+                                    new Student1("庆帝", 34),
+                                    new Student1("陈萌萌", 33));
+        list1.stream().distinct().forEach((x) -> System.out.println(x.toString()));
+
+        System.out.println("======= 已重写 equals 和 hashCode 方法");
+        List list2 = Arrays.asList(new Student2("范闲", 18),
+                                    new Student2("范闲", 18),
+                                    new Student2("庆帝", 34),
+                                    new Student2("陈萌萌", 33));
+        list2.stream().distinct().forEach((x) -> System.out.println(x.toString()));
+    }
+}
+
+class Student1 {
+    private String name;
+    private int age;
+
+    public Student1(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Student2{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+
+class Student2 {
+    private String name;
+    private int age;
+
+    public Student2(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student2 student2 = (Student2) o;
+        return age == student2.age &&
+                Objects.equals(name, student2.name);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name, age);
+    }
+
+    @Override
+    public String toString() {
+        return "Student2{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
